@@ -1,55 +1,61 @@
 blueprint:
-  name: Shelly BLU Button1 Press
-  description: Control anything from a Shelly Button1
+  name: Shelly BLU Button1 Control (Short, Double Press, Triple Press and  Long Press)
+  description: Control devices from a Shelly Button1 with different press actions
   domain: automation
   input:
-    remote:
+    button_device:
       name: Shelly BLU Button1
-      description: Button to use
+      description: Select button to use
       selector:
         device:
-          integration: BTHome
+          integration: bthome
           multiple: false
     button_single:
-      name: Single click
+      name: Single Press
       default: []
       selector:
         action: {}
     button_double:
-      name: Double click
+      name: Double Press
       default: []
       selector:
         action: {}
     button_triple:
-      name: Triple click
+      name: Triple Press
       default: []
       selector:
         action: {}
     button_long:
-      name: Long click
+      name: Long Press
       default: []
       selector:
         action: {}
-mode: restart
+mode: single
 max_exceeded: silent
 trigger:
 - platform: event
-  event_type: shelly.click
+  event_type: bthome_ble_event
   event_data:
-    device_id: !input remote
+    device_id: !input button_device
 action:
-- variables:
-    event: '{{ trigger.event.data.click_type }}'
 - choose:
   - conditions:
-    - '{{ event == "single" }}'
+    - condition: template
+      value_template: '{{ trigger.event.data.event_class == ''button'' and trigger.event.data.event_type
+        == ''press'' }}'
     sequence: !input button_single
   - conditions:
-    - '{{ event == "double" }}'
+    - condition: template
+      value_template: '{{ trigger.event.data.event_class == ''button'' and trigger.event.data.event_type
+        == ''double_press'' }}'
     sequence: !input button_double
   - conditions:
-    - '{{ event == "triple" }}'
+    - condition: template
+      value_template: '{{ trigger.event.data.event_class == ''button'' and trigger.event.data.event_type
+        == ''triple_press'' }}'
     sequence: !input button_triple
   - conditions:
-    - '{{ event == "long" }}'
+    - condition: template
+      value_template: '{{ trigger.event.data.event_class == ''button'' and trigger.event.data.event_type
+        == ''long_press'' }}'
     sequence: !input button_long
