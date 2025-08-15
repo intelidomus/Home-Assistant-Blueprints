@@ -1,15 +1,14 @@
 blueprint:
-  name: Shelly Button1 Press
+  name: Shelly BLU Button1 Press
   description: Control anything from a Shelly Button1
   domain: automation
   input:
     remote:
-      name: Shelly Button1
+      name: Shelly BLU Button1
       description: Button to use
       selector:
         device:
-          integration: shelly
-          model: Shelly Button1
+          integration: BTHome
           multiple: false
     button_single:
       name: Single click
